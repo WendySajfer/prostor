@@ -21,19 +21,27 @@ import { cn } from '~/lib/utils'
 import { Button } from './ui/button'
 
 export default function BurgerMenu() {
+  const { data: sessionData } = useSession()
   return (
     <Sheet key="burger">
       <SheetTrigger asChild>
         <Image
           src={burger}
           alt="burger"
-          className={cn(`h-10 w-10`, `cursor-pointer`, `hover:shadow-xl`)}
+          className={cn(
+            `h-10 w-10`,
+            `cursor-pointer`,
+            `shadow-none`,
+            `transition-shadow duration-300 ease-in-out`,
+            `hover:shadow-[0px_4px_8px_rgba(0,0,0,0.10)]`,
+          )}
         />
       </SheetTrigger>
-      <SheetContent side="left" className={cn(`py-16 min-w-[320px] max-w-sm`)}>
-        <SheetClose asChild>
-          <div className={cn(`grid items-center gap-4`)}>
-            <Link href="/"
+      <SheetContent side="left" className={cn(`min-w-[320px] max-w-sm py-16`)}>
+        <div className={cn(`grid items-center gap-4`)}>
+          <SheetClose asChild>
+            <Link
+              href={{ pathname: '/' }}
               className={cn(
                 `text-lg font-medium tracking-wider text-white`,
                 `burger-menu_animate rounded-lg`,
@@ -44,9 +52,27 @@ export default function BurgerMenu() {
             >
               Главная
             </Link>
-            <AuthShowcase/>
-          </div>
-        </SheetClose>
+          </SheetClose>
+          {sessionData && (
+            <SheetClose asChild>
+              <Link
+                href={{ pathname: '/post/create' }}
+                className={cn(
+                  `text-lg font-medium tracking-wider text-white`,
+                  `burger-menu_animate rounded-lg`,
+                  `h-14 w-[80%]`,
+                  `cursor-pointer`,
+                  `flex items-center p-3`,
+                )}
+              >
+                Опубликовать
+              </Link>
+            </SheetClose>
+          )}
+          <SheetClose asChild>
+            <AuthShowcase />
+          </SheetClose>
+        </div>
       </SheetContent>
     </Sheet>
   )
@@ -63,13 +89,13 @@ function AuthShowcase() {
 
   return (
     <Button
-    className={cn(
-      `text-lg font-medium tracking-wider text-white`,
-      `burger-menu_animate rounded-lg`,
-      `h-14 w-[80%]`,
-      `cursor-pointer`,
-      `flex items-center justify-start p-3`,
-    )}
+      className={cn(
+        `text-lg font-medium tracking-wider text-white`,
+        `burger-menu_animate rounded-lg`,
+        `h-14 w-[80%]`,
+        `cursor-pointer`,
+        `flex items-center justify-start p-3`,
+      )}
       onClick={sessionData ? () => void signOut() : () => void signIn()}
     >
       {sessionData ? 'Выйти' : 'Войти через вк'}

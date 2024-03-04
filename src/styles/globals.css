@@ -34,6 +34,8 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    --heart-size: 9em;
   }
 
   .dark {
@@ -99,7 +101,7 @@
 /* Стиль псевдоэлемента */
 .burger-menu_animate::after {
   content: '';
-  @apply [border-radius:inherit] absolute top-0 left-0 w-full h-full bg-[linear-gradient(75deg,var(--secondary)_0%,var(--primary)_70%)] opacity-0 transition-opacity duration-300 ease-in-out;
+  @apply absolute left-0 top-0 h-full w-full bg-[linear-gradient(75deg,var(--secondary)_0%,var(--primary)_70%)] opacity-0 transition-opacity duration-300 ease-in-out [border-radius:inherit];
   z-index: -1;
 }
 
@@ -109,6 +111,38 @@
 
 .burger-menu_animate:hover {
   @apply translate-x-4 scale-110;
+}
+
+.form-border-gradient {
+  //border: 3px solid #0000;
+  @apply border-[3px] border-[#0000];
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(75deg, var(--secondary), var(--primary)) border-box;
+}
+.custom-button_animate {
+  background-color: transparent;
+  border: 2px solid #0000;
+  color: white;
+  border-radius: 0.6em;
+  background: linear-gradient(75deg, var(--secondary), var(--primary))
+    border-box;
+  box-shadow:
+    0 0 0 0 var(--primary) inset,
+    0 0 0 0 var(--primary);
+  transition: all 100ms ease-in-out;
+}
+.custom-button_animate:hover {
+  color: var(--primary);
+  background: #0000;
+  box-shadow:
+    0 0 0 0 var(--primary) inset,
+    0 0 10px 4px var(--primary);
+}
+.custom-button_animate:active {
+  box-shadow:
+    0 0 10px 4px var(--primary) inset,
+    0 0 10px 4px var(--primary);
 }
 
 @layer base {
@@ -121,5 +155,82 @@
   html {
     font-family: 'Montserrat Alternates';
     font-weight: 400;
+  }
+}
+
+.heart {
+  position: relative;
+  width: var(--heart-size);
+  height: var(--heart-size);
+}
+.heart svg {
+  filter: drop-shadow(0 2px 2px var(--primary)) drop-shadow(0px -1px 2px var(--primary));
+  cursor: pointer;
+}
+.heart__checkbox {
+  appearance: none;
+  position: absolute;
+  z-index: 2;
+  cursor: pointer;
+  transform: scale(1);
+}
+.heart__checkbox:focus {
+  outline: none;
+}
+.heart__checkbox:hover ~ .heart__icon {
+  transform: scale(1.1);
+}
+.heart__checkbox:checked ~ .heart__icon {
+  animation: heartAnimation forwards 1s;
+  filter: none;
+}
+.heart__icon {
+  fill: white;
+  width: var(--heart-size);
+  height: var(--heart-size);
+  transform: scale(1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 200ms ease-out;
+}
+.heart__icon::before, .heart__icon::after {
+  content: "";
+  display: block;
+  background: inherit;
+  width: var(--heart-size);
+  height: var(--heart-size);
+  position: absolute;
+}
+.heart__icon::before {
+  top: 0;
+  left: -50%;
+}
+.heart__icon::after {
+  left: 0;
+  top: -50%;
+}
+
+@keyframes heartAnimation {
+  0% {
+    transform: scale(1.1);
+  }
+  25% {
+    transform: scale(0.7);
+    filter: drop-shadow(0 0px 0px var(--primary)) drop-shadow(0px 0px 0px var(--primary));
+  }
+  45% {
+    transform: scale(1.4);
+    fill: url(#grad1);
+    filter: none;
+  }
+  70% {
+    transform: scale(1);
+    fill: url(#grad1);
+  }
+  100% {
+    transform: scale(1.1);
+    fill: url(#grad1);
+    filter: none;
   }
 }
