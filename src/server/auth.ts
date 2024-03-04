@@ -158,9 +158,9 @@ const propsPruner = {
   },
   pruneUser(user: User) {
     return {
+      name: user.name,
       email: user.email,
       image: user.image,
-      name: user.name,
     }
   },
 }
@@ -232,18 +232,18 @@ async function configureAccount({
     // Для оптимизации
     userChanged({
       newUser: {
+        name,
         email,
         image,
-        name,
       },
       oldUser: existingUser,
     })
   ) {
     existingUser = await db.user.update({
       data: {
+        name,
         email: email ?? null,
         image: image ?? null,
-        name,
       },
       where: { id: existingUser.id },
     })
@@ -256,9 +256,9 @@ async function configureAccount({
   existingUser = await createUser(db, {
     account: propsPruner.pruneAccount(account),
     user: {
+      name: user.name ?? null,
       email: email ?? null,
       image: image ?? null,
-      name: user.name ?? null,
     },
   })
   account.userId = existingUser.id

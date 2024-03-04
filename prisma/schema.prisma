@@ -15,16 +15,22 @@ datasource db {
 }
 
 model Post {
-    id        Int   @id @default(autoincrement())
-    name      String
+    id        String  @id @default(cuid())
+    title     String
+    body      String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
 
-    @@index([name])
+    likes     Int      @default(0)
+    likers    User[]   @relation("LikedPost")
+    
+    @@index([title])
 }
+
+
 
 // Necessary for Next auth
 model Account {
@@ -64,6 +70,8 @@ model User {
     sessions      Session[]
     
     posts         Post[]
+
+    liked         Post[]  @relation("LikedPost")
 }
 
 model VerificationToken {
